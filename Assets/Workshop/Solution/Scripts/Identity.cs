@@ -7,7 +7,7 @@ namespace Solution
 
     public class Identity : MonoBehaviour
     {
-        [Header("Identity")]
+        
         public string Name;
         public int positionX;
         public int positionY;
@@ -16,9 +16,8 @@ namespace Solution
 
         public void PrintInfo()
         {
-            Debug.Log("tell me your " + Name);
+            Debug.Log("Tell me your" +  Name);
         }
-
         public virtual void Hit()
         {
 

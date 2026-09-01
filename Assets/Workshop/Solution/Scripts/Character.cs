@@ -10,66 +10,43 @@ namespace Solution
 {
     public class Character : Identity
     {
-        [Header("Character")]
+       
         public int energy;
         public int AttackPoint;
-
-        protected bool isAlive;
         protected bool isFreeze;
-
-        // Start is called before the first frame update
-        protected void GetRemainEnergy()
-        {
-            Debug.Log(Name + " : " + energy);
-        }
 
         public virtual void Move(Vector2 direction)
         {
-            if (isFreeze == true)
-            {
-                GetComponent<SpriteRenderer>().color = Color.white;
-                isFreeze = false;
-                return;
-            }
-            int toX = (int)(positionX + direction.x);
+            int toX = (int)(positionX+ direction.x);
             int toY = (int)(positionY + direction.y);
 
             if (HasPlacement(toX, toY))
             {
-                if (IsDemonWalls(toX, toY))
+                if(IsPotion(toX, toY))
+                {
+                    mapGenerator.potions[toX, toY].Hit();
+                    mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
+                    positionX = toX;
+                    positionY = toY;
+                    transform.position = new Vector2(positionX, positionY);
+                }
+                else if (IsDemonWalls(toX, toY))
                 {
                     mapGenerator.walls[toX, toY].Hit();
-                }
-                else if (IsPotion(toX, toY))
-                {
-                    mapGenerator.potions[toX, toY].Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
-                }
-                else if (IsPotionBonus(toX, toY))
-                {
-                    mapGenerator.potions[toX, toY].Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
                 }
                 else if (IsExit(toX, toY))
                 {
                     mapGenerator.Exit.Hit();
-                    positionX = toX;
-                    positionY = toY;
-                    transform.position = new Vector3(positionX, positionY, 0);
                 }
-                // QUESTION: กรณีที่ block ปลายทางเรามีของวางอยู่จะไม่เสีย energy เหมือนที่เราเดินไปลง block ว่างๆ ใช่ไหม?
             }
             else
             {
+                mapGenerator.mapdata[positionX, positionY] = mapGenerator.empty;
                 positionX = toX;
                 positionY = toY;
-                transform.position = new Vector3(positionX, positionY, 0);
-                TakeDamage(1);
+                transform.position = new Vector2(positionX, positionY);
             }
+            
 
         }
         // hasPlacement คืนค่า true ถ้ามีการวางอะไรไว้บน map ที่ตำแหน่ง x,y

@@ -9,7 +9,7 @@ namespace Solution
     {
         public void Start()
         {
-            GetRemainEnergy();
+            //GetRemainEnergy();
         }
 
         public void Attack(OOPPlayer _player)
